@@ -1,1 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myriam's Christmas Surprise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c2c4a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Snowflakes */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 1em;
+            animation: fall linear infinite;
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        header {
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            color: #ff6b8b;
+            text-shadow: 0 0 15px rgba(255, 107, 139, 0.7);
+            letter-spacing: 1px;
+        }
+        
+        .for-myriam {
+            font-size: 1.8rem;
+            color: #a8e6cf;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #f1faee;
+            margin-bottom: 2rem;
+        }
+        
+        /* Countdown Styles */
+        .countdown-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        
+        .countdown-item {
+            background: rgba(168, 230, 207, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 0.5rem;
+            min-width: 120px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(168, 230, 207, 0.3);
+            transition: transform 0.3s ease;
+        }
 
+        .countdown-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .countdown-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #a8e6cf;
+            text-shadow: 0 0 10px rgba(168, 230, 207, 0.5);
+        }
+        
+        .countdown-label {
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            color: #f1faee;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .message {
+            font-size: 1.8rem;
+            margin: 2rem 0;
+            color: #f1faee;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            color: #ffd166;
+            font-weight: bold;
+        }
+        
+        /* Present Box */
+        .present-container {
+            position: relative;
+            margin: 3rem auto;
+            max-width: 400px;
+            display: none;
+        }
+        
+        .present-box {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+        
+        .present-box:hover {
+            transform: scale(1.05);
+        }
+        
+        .box {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b8b 0%, #ff8e6b 100%);
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(255, 107, 139, 0.4);
+            overflow: hidden;
+        }
+        
+        .box-lid {
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(45deg, #ff8e6b 0%, #ff6b8b 100%);
+            border-radius: 15px 15px 0 0;
+            position: absolute;
+            top: 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 2s ease;
+            transform-origin: top;
+        }
+        
+        .box.open .box-lid {
+            transform: rotateX(-180deg);
+        }
+        
+        .ribbon {
+            position: absolute;
+            background: #a8e6cf;
+            box-shadow: 0 0 10px rgba(168, 230, 207, 0.7);
+        }
+        
+        .ribbon-horizontal {
+            width: 100%;
+            height: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .ribbon-vertical {
+            height: 100%;
+            width: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .ribbon-bow {
+            width: 60px;
+            height: 60px;
+            background: #ffd166;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(255, 209, 102, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        /* Present Content (Hidden until Christmas) */
+        .present-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #ffd166 0%, #ffb347 100%);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s ease 0.5s;
+            overflow-y: auto;
+        }
+        
+        .box.open .present-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .present-title {
+            font-size: 2.5rem;
+            color: #0c2c4a;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .present-message {
+            font-size: 1.4rem;
+            color: #0c2c4a;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .present-signature {
+            font-size: 1.8rem;
+            color: #ff6b8b;
+            margin-top: 1rem;
+            font-style: italic;
+            text-align: right;
+            width: 100%;
+        }
+        
+        /* Decorative Elements */
+        .santa-hat {
+            font-size: 4rem;
+            margin: 1rem 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .tree {
+            font-size: 3rem;
+            color: #2a9d8f;
+            margin: 0 0.5rem;
+            display: inline-block;
+            animation: sway 3s infinite alternate;
+        }
+        
+        @keyframes sway {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+        
+        .ornaments {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .ornament {
+            font-size: 2rem;
+            margin: 0.5rem;
+            animation: twinkle 2s infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.7; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        footer {
+            margin-top: 3rem;
+            padding: 1rem;
+            color: #a8dadc;
+            font-size: 0.9rem;
+        }
+        
+        .instruction {
+            font-size: 1.2rem;
+            color: #ffd166;
+            margin-top: 1.5rem;
+            font-style: italic;
+        }
+        
+        /* Christmas Day Styles */
+        .christmas-day .countdown-container {
+            background: rgba(255, 209, 102, 0.15);
+            border-color: rgba(255, 209, 102, 0.3);
+        }
+        
+        .christmas-day .countdown-item {
+            background: rgba(255, 107, 139, 0.2);
+            border-color: rgba(255, 107, 139, 0.3);
+        }
+        
+        .christmas-day .countdown-number {
+            color: #ff6b8b;
+            text-shadow: 0 0 10px rgba(255, 107, 139, 0.5);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .for-myriam {
+                font-size: 1.4rem;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                padding: 1rem;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .present-box {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .present-title {
+                font-size: 2rem;
+            }
+            
+            .present-message {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Snowflakes will be generated here -->
+    <div id="snowflakes-container"></div>
+    
+    <div class="container">
+        <header>
+            <h1>🎄 Christmas Countdown 🎄</h1>
+            <div class="for-myriam">A Special Countdown for Myriam</div>
+            <div class="subtitle">A surprise gift is waiting for you on Christmas Day!</div>
+        </header>
+        
+        <div class="countdown-container" id="countdown-container">
+            <div class="santa-hat">🎅</div>
+            
+            <div class="message">
+                Only <span class="highlight" id="days-until">X</span> days until your Christmas surprise!
+            </div>
+            
+            <div class="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-number" id="days">00</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="hours">00</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="minutes">00</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="seconds">00</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+            
+            <div class="ornaments">
+                <div class="ornament">🎁</div>
+                <div class="ornament">✨</div>
+                <div class="ornament">⭐</div>
+                <div class="ornament">❄️</div>
+                <div class="ornament">🎄</div>
+            </div>
+            
+            <!-- Present Box (Hidden until Christmas) -->
+            <div class="present-container" id="present-container">
+                <div class="present-box" id="present-box">
+                    <div class="box" id="box">
+                        <div class="box-lid"></div>
+                        <div class="ribbon ribbon-horizontal"></div>
+                        <div class="ribbon ribbon-vertical"></div>
+                        <div class="ribbon-bow">🎀</div>
+                        <div class="present-content" id="present-content">
+                            <h2 class="present-title">Merry Christmas Myriam! 🎄</h2>
+                            <div class="present-message">
+                                My dearest Myriam,<br><br>
+                                
+                                As the snow falls gently outside and Christmas lights twinkle in the night, 
+                                I wanted to take a moment to tell you how truly special you are. Your kindness 
+                                brightens every room you enter, your laughter is more beautiful than any 
+                                Christmas carol, and your heart is a gift to everyone who knows you.<br><br>
+                                
+                                This Christmas, I hope you feel surrounded by love, warmth, and joy. 
+                                May your holiday be filled with magical moments, cozy memories, and the 
+                                company of those who cherish you most.<br><br>
+                                
+                                You deserve all the happiness in the world, today and every day.<br><br>
+                                
+                                With all my love and warmest Christmas wishes,
+                            </div>
+                            <div class="present-signature">🎅 Your Secret Santa 🎁</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="instruction" id="present-instruction">Click on the present to open it!</div>
+            </div>
+            
+            <div class="message" id="christmas-message">
+                Your special Christmas present will appear here on December 25th!
+            </div>
+            
+            <div class="trees">
+                <div class="tree">🎄</div>
+                <div class="tree">🎄</div>
+                <div class="tree">🎄</div>
+            </div>
+        </div>
+        
+        <footer>
+            Made with ❤️ for Myriam's Christmas Surprise | Countdown to Christmas <span id="current-year"></span>
+        </footer>
+    </div>
+
+    <script>
+        // Create snowflakes
+        function createSnowflakes() {
+            const container = document.getElementById('snowflakes-container');
+            const snowflakeCount = 80;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.innerHTML = '❄';
+                
+                // Random properties
+                const size = Math.random() * 1.2 + 0.5;
+                const left = Math.random() * 100;
+                const animationDuration = Math.random() * 10 + 5;
+                const opacity = Math.random() * 0.7 + 0.3;
+                const animationDelay = Math.random() * 15;
+                
+                snowflake.style.left = `${left}vw`;
+                snowflake.style.fontSize = `${size}em`;
+                snowflake.style.animationDuration = `${animationDuration}s`;
+                snowflake.style.opacity = opacity;
+                snowflake.style.animationDelay = `${animationDelay}s`;
+                
+                container.appendChild(snowflake);
+            }
+        }
+        
+        // Update countdown and check if it's Christmas
+        function updateCountdown() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            let christmas = new Date(currentYear, 11, 25); // December 25
+            
+            // If Christmas has passed this year, set for next year
+            if (now > christmas) {
+                christmas = new Date(currentYear + 1, 11, 25);
+            }
+            
+            const timeDiff = christmas - now;
+            
+            // Calculate days, hours, minutes, seconds
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            
+            // Update DOM
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            document.getElementById('days-until').textContent = days;
+            
+            // Check if it's Christmas Day
+            const isChristmas = days === 0 && hours === 0 && minutes === 0 && seconds === 0;
+            const isChristmasDay = (now.getMonth() === 11 && now.getDate() === 25);
+            
+            if (isChristmasDay || isChristmas) {
+                // It's Christmas! Show the present
+                showChristmasPresent();
+            } else {
+                // Update Christmas message based on days remaining
+                updateChristmasMessage(days);
+            }
+        }
+        
+        // Update Christmas message based on days remaining
+        function updateChristmasMessage(days) {
+            const messageElement = document.getElementById('christmas-message');
+            let message = '';
+            
+            if (days > 30) {
+                message = "Your special Christmas present will appear here on December 25th!";
+            } else if (days > 14) {
+                message = "Getting closer to your Christmas surprise!";
+            } else if (days > 7) {
+                message = "Only one week until your Christmas present!";
+            } else if (days > 1) {
+                message = "The excitement is building! Your present is almost here!";
+            } else if (days === 1) {
+                message = "Christmas Eve! Your present will appear tomorrow!";
+            } else if (days === 0) {
+                message = "Merry Christmas! Your present is here!";
+            }
+            
+            messageElement.textContent = message;
+        }
+        
+        // Show Christmas present (called when it's Christmas)
+        function showChristmasPresent() {
+            const container = document.getElementById('present-container');
+            const countdownContainer = document.getElementById('countdown-container');
+            const messageElement = document.getElementById('christmas-message');
+            
+            // Show the present container
+            container.style.display = 'block';
+            
+            // Update message
+            messageElement.textContent = "Merry Christmas Myriam! Your present is here! 🎁";
+            
+            // Add Christmas day styling
+            document.body.classList.add('christmas-day');
+            countdownContainer.classList.add('christmas-day');
+            
+            // Set up present opening
+            setupPresentOpening();
+        }
+        
+        // Set up present opening interaction
+        function setupPresentOpening() {
+            const presentBox = document.getElementById('present-box');
+            const box = document.getElementById('box');
+            const instruction = document.getElementById('present-instruction');
+            let isOpen = false;
+            
+            presentBox.addEventListener('click', function() {
+                if (!isOpen) {
+                    // Open the present
+                    box.classList.add('open');
+                    instruction.textContent = "Your Christmas message is inside! ❤️";
+                    isOpen = true;
+                    
+                    // Add some sparkle effect
+                    createSparkles();
+                } else {
+                    // Close the present
+                    box.classList.remove('open');
+                    instruction.textContent = "Click on the present to open it again!";
+                    isOpen = false;
+                }
+            });
+        }
+        
+        // Create sparkle effect when present opens
+        function createSparkles() {
+            const container = document.getElementById('present-container');
+            
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.style.position = 'absolute';
+                sparkle.style.width = '10px';
+                sparkle.style.height = '10px';
+                sparkle.style.background = '#ffd166';
+                sparkle.style.borderRadius = '50%';
+                sparkle.style.boxShadow = '0 0 10px #ffd166';
+                sparkle.style.zIndex = '10';
+                
+                // Random position around the present
+                const left = Math.random() * 300 + 50;
+                const top = Math.random() * 300;
+                
+                sparkle.style.left = `${left}px`;
+                sparkle.style.top = `${top}px`;
+                
+                // Animation
+                sparkle.style.animation = `sparkle 1.5s ease-out forwards`;
+                
+                // Add keyframes for animation
+                if (!document.getElementById('sparkle-keyframes')) {
+                    const style = document.createElement('style');
+                    style.id = 'sparkle-keyframes';
+                    style.textContent = `
+                        @keyframes sparkle {
+                            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+                            50% { transform: scale(1) rotate(180deg); opacity: 1; }
+                            100% { transform: scale(0) rotate(360deg); opacity: 0; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+                
+                container.appendChild(sparkle);
+                
+                // Remove sparkle after animation
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 1500);
+            }
+        }
+        
+        // Set current year in footer
+        function setCurrentYear() {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+        }
+        
+        // Initialize everything when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            createSnowflakes();
+            updateCountdown();
+            setCurrentYear();
+            
+            // Update countdown every second
+            setInterval(updateCountdown, 1000);
+            
+            // Check if it's already Christmas when page loads
+            const now = new Date();
+            const isChristmasDay = (now.getMonth() === 11 && now.getDate() === 25);
+            
+            if (isChristmasDay) {
+                // It's already Christmas! Show the present immediately
+                setTimeout(showChristmasPresent, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

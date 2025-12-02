@@ -1,7 +1,7 @@
 # Myriam's Christmas Surprise Present 🎁
 
 ## Live Demo
-👉 **[Click here to view the live page](https://danielgaudreault.github.io/MyriamsPresent/))** 👈
+👉 **[Click here to view the live page](https://danielgaudreault.github.io/MyriamsPresent/)** 👈
 
 ## Description
 A magical Christmas countdown webpage with a special surprise present that reveals itself on Christmas Day for Myriam. The page features an interactive countdown timer, festive animations, and a hidden present that only appears on December 25th.
